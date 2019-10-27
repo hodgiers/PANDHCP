@@ -20,9 +20,11 @@ root = tree.getroot()
 for interfaces in root.iter('interface'):
 	print (interfaces.attrib)
 	for entries in interfaces.findall('./entry'):
-		print (entries.attrib)
+		print (entries.attrib, entries.text)
 		for details in entries.iter('*'):
-			print (details.tag)
+			print ( details.tag, details.text,)
+			#for expanded_details in details.iter('*'):
+				#print (expanded_details.text)
 
 	#print (interface)
 #	print (child.tag, child.attrib)

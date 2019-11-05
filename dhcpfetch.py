@@ -4,37 +4,31 @@ import config
 import requests
 from xml.etree import ElementTree as ET
 import pprint
+import json
+import xmltodict
 
 
 apikey = config.api_key
 device = config.firewall
 opcommand = "/api/?type=op&cmd=<show><dhcp><server><lease><interface>all</interface></lease></server></dhcp></show>&key="
-
 response = requests.get(device + opcommand + apikey, verify=False)
 seed = ET.fromstring(response.content)
-tree = ET.ElementTree(seed)
-root = tree.getroot()
 
-#print (root.tag)
+def convert_to_json():
+	xml = seed
+	to_dict = xmltodict.parse(ET.tostring(xml))
+	to_json = json.dumps(to_dict, indent=3)
+	print (to_json)
 
-for interfaces in root.iter('interface'):
-	print (interfaces.attrib)
-	for entries in interfaces.findall('./entry'):
-		print (entries.attrib, entries.text)
-		for details in entries.iter('*'):
-			print ( details.tag, details.text,)
-			#for expanded_details in details.iter('*'):
-				#print (expanded_details.text)
-
-	#print (interface)
-#	print (child.tag, child.attrib)
+def main():
+	convert_to_json()
 
 
-#for child in tree.iter('*'):
-#	print (child.tag, child.attrib)
+main()
 
-#####root = tree.getroot()
-#####print(root.attrib)
 
-######for child in tree.iter('*'):
-#####	print (child.tag, child.attrib)
+#What to do next:
+#Build MongoDB 
+	#What parameters will be used for this DB?
+	#How will I get that data to the DB?
+	
